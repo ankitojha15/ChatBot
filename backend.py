@@ -34,8 +34,8 @@ graph = StateGraph(ChatState)
 
 graph.add_node('chat node',chat_node)
 
-graph.add_edge(START,chat_node)
-graph.add_edge(chat_node,END)
+graph.add_edge(START,"chat node")
+graph.add_edge("chat node",END)
 
 chatbot = graph.compile()
 
