@@ -20,13 +20,27 @@ class ChatState(TypedDict):
 
 def chat_node(state: ChatState):
     # take user query from state
-    
+    messages = state["messages"]
 
     # send to llm
+    response = llm.invoke(messages)
 
     # response -> store in state
+
+    return {'messages' : [response]}
 
 
 graph = StateGraph(ChatState)
 
 graph.add_node('chat node',chat_node)
+
+graph.add_edge(START,chat_node)
+graph.add_edge(chat_node,END)
+
+chatbot = graph.compile()
+
+initial_state = {
+    'messages' : [HumanMessage(content = "what is the capital of India")]
+}
+
+chatbot.invoke(initial_state)
