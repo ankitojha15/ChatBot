@@ -4,6 +4,7 @@ from langchain_groq import ChatGroq
 from typing import TypedDict , Annotated
 from dotenv import load_dotenv
 import time
+from langgraph.checkpoint.memory import MemorySaver
 
 load_dotenv()
 
@@ -30,6 +31,7 @@ def chat_node(state: ChatState):
 
     return {'messages' : [response]}
 
+checkpointer = MemorySaver()
 
 graph = StateGraph(ChatState)
 
@@ -38,16 +40,10 @@ graph.add_node('chat node',chat_node)
 graph.add_edge(START,"chat node")
 graph.add_edge("chat node",END)
 
-chatbot = graph.compile()
+chatbot = graph.compile(checkpointer=checkpointer)
 
-'''initial_state = {
-    'messages' : [HumanMessage(content = "what is the capital of India")]
-}
 
-result = chatbot.invoke(initial_state)['messages'][-1].content
-
-print(result)'''
-
+thread_id = '1'
 
 while True:
 
@@ -61,6 +57,7 @@ while True:
         print("end")
         break
 
-    else:
-        response = chatbot.invoke({"messages" : [HumanMessage(content=user_message)]})
-        print("AI: ", response['messages'][-1].content)
+    config = {'configurable' : {'thread_id':thread_id}}
+
+    response = chatbot.invoke({"messages" : [HumanMessage(content=user_message)]},config = config)
+    print("AI: ", response['messages'][-1].content)
