@@ -3,6 +3,7 @@ from langchain_core.messages import BaseMessage , HumanMessage
 from langchain_groq import ChatGroq
 from typing import TypedDict , Annotated
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -56,6 +57,9 @@ while True:
 
     if user_message.strip().lower() in ['exit', 'quit', 'bye']:
         print("exiting..")
+        time.sleep(3)
+        print("end")
+        break
 
     else:
         response = chatbot.invoke({"messages" : [HumanMessage(content=user_message)]})
