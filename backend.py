@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm = ChatGroq(
-    model = "openai/gpt-oss-120b"
+    model = "groq/compound-mini"
 )
 
 # reducer
@@ -39,8 +39,24 @@ graph.add_edge("chat node",END)
 
 chatbot = graph.compile()
 
-initial_state = {
+'''initial_state = {
     'messages' : [HumanMessage(content = "what is the capital of India")]
 }
 
-chatbot.invoke(initial_state)
+result = chatbot.invoke(initial_state)['messages'][-1].content
+
+print(result)'''
+
+
+while True:
+
+    user_message = input("Type here (type exit,quit or bye to stop) : ")
+
+    print(user_message)
+
+    if user_message.strip().lower() in ['exit', 'quit', 'bye']:
+        print("exiting..")
+
+    else:
+        response = chatbot.invoke({"messages" : [HumanMessage(content=user_message)]})
+        print("AI: ", response['messages'][-1].content)
