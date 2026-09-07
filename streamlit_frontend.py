@@ -3,7 +3,7 @@ from backend import chatbot
 from langchain_core.messages import HumanMessage
 
 
-CONFIG = {'configurable': {'config':'thread_1'}}
+CONFIG = {'configurable': {'thread_id':'thread-1'}}
 
 # st.session_state -> dict ->
 if 'message_history' not in st.session_state:
@@ -21,8 +21,8 @@ if user_input:
     with st.chat_message('user'):
         st.text(user_input)
 
-    response = chatbot.invoke({'message':[HumanMessage(content = user_input)]},config=CONFIG)
-    ai_message = response['message'][-1].content
+    response = chatbot.invoke({'messages':[HumanMessage(content = user_input)]},config=CONFIG)
+    ai_message = response['messages'][-1].content
 
     st.session_state['message_history'].append({'role':'user','content':ai_message})
     with st.chat_message('assistant'):
