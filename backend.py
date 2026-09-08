@@ -42,4 +42,12 @@ graph.add_edge("chat node",END)
 
 chatbot = graph.compile(checkpointer=checkpointer)
 
+#generator to stream
+stream = chatbot.stream(
+    {'messages':[HumanMessage(content = 'whats the recipe to make maggie')]},
+    CONFIG = {'configurable': {'thread_id':'thread-1'}},
+    stream_mode="messages"
+
+)
+
 
